@@ -31,9 +31,25 @@ inline UIImage *SDScaledImageForKey(NSString *key, UIImage *image) {
             CGFloat scale = 1.0;
             if (key.length >= 8) {
                 // Search @2x. at the end of the string, before a 3 to 4 extension length (only if key len is 8 or more @2x. + 4 len ext)
-                NSRange range = [key rangeOfString:@"@2x" options:0 range:NSRangeFromString([NSString stringWithFormat:@"{%lu, %d}", (unsigned long)key.length - 3, 3])];
+                NSRange range =
+                    [key rangeOfString:@"@2x"
+                               options:0
+                                 range:NSRangeFromString([NSString stringWithFormat:@"{%lu, %d}", (unsigned long)key.length - 3, 3])];
+                
                 if (range.location != NSNotFound) {
                     scale = 2.0;
+                }
+                else
+                {
+                    range =
+                        [key rangeOfString:@"@3x"
+                                   options:0
+                                     range:NSRangeFromString([NSString stringWithFormat:@"{%lu, %d}", (unsigned long) key.length - 3, 3])];
+
+                    if (range.location != NSNotFound)
+                    {
+                        scale = 3.0;
+                    }
                 }
             }
 
